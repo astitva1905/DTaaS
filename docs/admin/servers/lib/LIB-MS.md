@@ -7,9 +7,7 @@ It has three features:
 * transfer a file to user.
 * Source files can either come from local file system or from a gitlab instance.
 
-The library microservice is designed to manage and serve files,
-functions, and models to users, allowing them to access and interact
-with various resources.
+The library microservice is designed to manage and serve files, functions, and models to users, allowing them to access and interact with various resources.
 
 This document provides instructions for running a stand alone library microservice.
 
@@ -19,9 +17,7 @@ The users expect the following file system structure for their reusable assets.
 
 ![File System Layout](file-system-layout.png)
 
-There is a skeleton file structure in
-[DTaaS codebase](https://github.com/INTO-CPS-Association/DTaaS/tree/feature/distributed-demo/files).
-You can copy and create file system for your users.
+There is a skeleton file structure in [DTaaS codebase](https://github.com/INTO-CPS-Association/DTaaS/tree/feature/distributed-demo/files). You can copy and create file system for your users.
 
 ## Gitlab setup (optional)
 
@@ -42,8 +38,7 @@ to get a sample file system structure for the lib microservice.
 
 To set up the lib microservice, follow these steps:
 
-Download the **lib-microservice.zip** from the
-[releases page](https://github.com/INTO-CPS-Association/DTaaS/releases).
+Download the **lib-microservice.zip** from the [releases page](https://github.com/INTO-CPS-Association/DTaaS/releases).
 
 ## Configuration setup
 
@@ -82,10 +77,8 @@ Replace the default values the appropriate values for your setup.
 
 **NOTE**:
 
-1. When \__MODE=local_, only _LOCAL_PATH_ is used.
-   Other environment variables are unused.
-1. When _MODE=gitlab_, _GITLAB_URL, TOKEN_,
-   and _GITLAB_GROUP_ are used; _LOCAL_PATH_ is unused.
+1. When \__MODE=local_, only _LOCAL_PATH_ is used. Other environment variables are unused.
+1. When _MODE=gitlab_, _GITLAB_URL, TOKEN_, and _GITLAB_GROUP_ are used; _LOCAL_PATH_ is unused.
 
 ### Start Microservice
 
@@ -116,7 +109,7 @@ The lib microservice supports two GraphQL queries.
 
 ### Directory Listing
 
-#### Query: List of Files
+#### Query
 
 To retrieve a list of files in a directory, use the following GraphQL query.
 Replace `path` with the desired directory path.
@@ -148,7 +141,7 @@ query {
 }
 ```
 
-#### Response: List of Files
+#### Response
 
 This query returns the list of files and subdirectories in the specified directory.
 The response will include the name and type of each item.
@@ -211,7 +204,7 @@ The response will include the name and type of each item.
 
 ### Fetching a File
 
-#### Query: Get File Contents
+#### Query
 
 This query receives directory path and send the file contents to user in response.
 
@@ -234,7 +227,7 @@ query {
 }
 ```
 
-#### Response: Get File Contents
+#### Response
 
 This query returns the name, raw binary blob, and raw text blob of
 the specified file. The `rawBlob` field contains the file contents
@@ -260,6 +253,7 @@ as plain text.
   }
 }
 ```
+
 
 ## HTTP API Calls
 
@@ -288,6 +282,7 @@ POST /lib HTTP/1.1
 Host: localhost:4001
 Content-Type: application/json
 Content-Length: 388
+
 {
    "query":"query {\n  listDirectory(path: \"user1\") {\n    repository {\n      tree {\n        blobs {\n          edges {\n            node {\n              name\n              type\n            }\n          }\n        }\n        trees {\n          edges {\n            node {\n              name\n              type\n            }\n          }\n        }\n      }\n    }\n  }\n}"
 }
@@ -303,6 +298,7 @@ Content-Length: 306
 Content-Type: application/json; charset=utf-8
 Date: Tue, 26 Sep 2023 20:26:49 GMT
 X-Powered-By: Express
+
 {"data":{"listDirectory":{"repository":{"tree":{"blobs":{"edges":[]},"trees":{"edges":[{"node":{"name":"data","type":"tree"}},{"node":{"name":"digital twins","type":"tree"}},{"node":{"name":"functions","type":"tree"}},{"node":{"name":"models","type":"tree"}},{"node":{"name":"tools","type":"tree"}}]}}}}}}
 ```
 
@@ -318,6 +314,7 @@ POST /lib HTTP/1.1
 Host: localhost:4001
 Content-Type: application/json
 Content-Length: 217
+
 {
    "query":"query {\n  readFile(path: \"user2/data/welcome.txt\") {\n    repository {\n      blobs {\n        nodes {\n          name\n          rawBlob\n          rawTextBlob\n        }\n      }\n    }\n  }\n}"
 }
@@ -331,5 +328,6 @@ Content-Length: 134
 Content-Type: application/json; charset=utf-8
 Date: Wed, 27 Sep 2023 09:17:18 GMT
 X-Powered-By: Express
+
 {"data":{"readFile":{"repository":{"blobs":{"nodes":[{"name":"welcome.txt","rawBlob":"hello world","rawTextBlob":"hello world"}]}}}}}
 ```
